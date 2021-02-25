@@ -1,0 +1,25 @@
+version: "2.1"
+
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
+    image: localstack/localstack
+    network_mode: bridge
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - DEFAULT_REGION=us-east-1
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=${PORT_WEB_UI- }
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+      - AWS_ACCESS_KEY_ID="aws_access_key_id"
+      - AWS_SECRET_ACCESS_KEY="aws_secret_access_key"
+    volumes:
+      - ./stubs/s3:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
